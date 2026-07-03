@@ -46,7 +46,7 @@ Tip: there is a `bacon.toml` for running clippy continuously:
 
 ### Test
 
-Integration tests live in `tests/integration.rs` and use the sample image in `test/data/`:
+Integration tests live in `tests/integration.rs` and use the synthetic sample image in `test/data/`:
 - `cargo test`
 
 #### Run a single test
@@ -80,7 +80,7 @@ The Windows OCR module cannot be compiled on other hosts; to type-check it, copy
 - `src/database.rs`: SQLite cache (`ocr_results` table) — store/lookup/prune/wipe.
 - `src/search.rs`: fzf-style fuzzy search over cached text (`nucleo-matcher`), scored per line.
 - `models/`: `.rten` models embedded into the binary.
-- `test/data/`: sample images used by integration tests (the sample PNG contains the text "tech.lol").
+- `test/data/`: synthetic sample image used by integration tests (the sample PNG contains the text "TEST OCR").
 - `tests/integration.rs`: integration tests for database, indexer, search, and both OCR paths.
 
 ## Code Style Guidelines (Rust)

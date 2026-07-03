@@ -4,7 +4,7 @@ use std::path::Path;
 use recall::database::{Database, OcrRecord};
 use recall::{indexer, ocr, search};
 
-const SAMPLE_IMAGE: &str = "test/data/image_2024-10-11_23-09-24 copy.png";
+const SAMPLE_IMAGE: &str = "test/data/synthetic_test_ocr.png";
 
 fn record(path: &str, filename: &str, text: &str) -> OcrRecord {
     OcrRecord {
@@ -98,7 +98,7 @@ fn ocrs_fallback_engine_reads_sample_image() {
         .unwrap();
     let text = ocr::ocrs_engine::extract_text(&image).unwrap();
     assert!(
-        text.to_lowercase().contains("tech"),
+        text.to_lowercase().contains("test"),
         "expected sample text, got: {text:?}"
     );
 }
@@ -107,7 +107,7 @@ fn ocrs_fallback_engine_reads_sample_image() {
 fn platform_ocr_reads_sample_image() {
     let outcome = ocr::extract_text(Path::new(SAMPLE_IMAGE)).unwrap();
     assert!(
-        outcome.text.to_lowercase().contains("tech"),
+        outcome.text.to_lowercase().contains("test"),
         "expected sample text via {}, got: {:?}",
         outcome.engine,
         outcome.text
