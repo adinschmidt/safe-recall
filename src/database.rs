@@ -152,13 +152,41 @@ impl Database {
     }
 
     /// SQL condition + LIKE prefix matching a directory itself (?1) and
-    /// everything below it (?2). LIKE wildcards in the path are escaped.
+    /// everything below it (?2). The separator is appended before escaping so
+    /// that on Windows (where the separator is also the ESCAPE character) it
+    /// gets escaped too, instead of accidentally escaping the `%` wildcard.
     fn dir_scope(directory: &str) -> (&'static str, String) {
-        let escaped = directory
+        let escaped = format!("{directory}{}", std::path::MAIN_SEPARATOR)
             .replace('\\', "\\\\")
             .replace('%', "\\%")
             .replace('_', "\\_");
-        let prefix = format!("{escaped}{}%", std::path::MAIN_SEPARATOR);
+        let prefix = format!("{escaped}%");
         ("path = ?1 OR path LIKE ?2 ESCAPE '\\'", prefix)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Database;
+
+    #[test]
+    fn dir_scope_keeps_wildcard_unescaped() {
+        let sep = std::path::MAIN_SEPARATOR;
+        let (_, prefix) = Database::dir_scope(&format!("{sep}photos"));
+        // The trailing % must be a bare wildcard: not preceded by the escape
+        // character (on Windows the separator IS the escape character, so it
+        // must itself be escaped as \\).
+        assert!(prefix.ends_with('%'));
+        assert!(
+            !prefix.ends_with("\\%") || prefix.ends_with("\\\\%"),
+            "wildcard is escaped away in {prefix:?}"
+        );
+    }
+
+    #[test]
+    fn dir_scope_escapes_like_wildcards_in_path() {
+        let (_, prefix) = Database::dir_scope("/pho_tos/100%");
+        assert!(prefix.contains("pho\\_tos"));
+        assert!(prefix.contains("100\\%"));
     }
 }
