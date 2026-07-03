@@ -4,9 +4,20 @@ SafeRecall is a CLI tool to OCR and search for text in your photos.
 
 ## Features
 
-- **Built-in OCR:** No need to install external OCR engines like Tesseract.
-- **Fast Search:** Quick search through OCR results stored in a local SQLite database.
+- **Built-in OCR:** Uses the OS-native OCR engine where available (Apple Vision on macOS, Windows OCR on Windows) and falls back to an embedded [ocrs](https://github.com/robertknight/ocrs) engine everywhere else — no need to install external OCR engines like Tesseract.
+- **Fast Fuzzy Search:** fzf-style fuzzy search through OCR results cached in a local SQLite database.
 - **Static Binary:** Compiles to a single binary with everything included.
+
+## Usage
+
+```sh
+recall "text to find" [directory]   # index new/changed images, then search
+recall -g "text to find"            # search everything ever indexed
+recall --cached "text to find"      # search the cache without re-scanning
+recall --wipe                       # clear all cached OCR results
+```
+
+Directories are walked recursively (hidden files and `.gitignore`d paths are skipped), OCR runs in parallel (`-n` to limit threads), and results are cached — a file is only re-OCRed when its modification time changes.
 
 ## Credits and Licenses
 

@@ -5,8 +5,8 @@ use rten::Model;
 use std::sync::LazyLock;
 
 // Embed models directly into the binary at compile time
-static DETECTION_MODEL_DATA: &[u8] = include_bytes!("../models/text-detection.rten");
-static RECOGNITION_MODEL_DATA: &[u8] = include_bytes!("../models/text-recognition.rten");
+static DETECTION_MODEL_DATA: &[u8] = include_bytes!("../../models/text-detection.rten");
+static RECOGNITION_MODEL_DATA: &[u8] = include_bytes!("../../models/text-recognition.rten");
 
 // Lazily initialize the OCR engine.
 //
