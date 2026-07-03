@@ -5,20 +5,26 @@ edition = "2021"
 
 [dependencies]
 anyhow = "=1.0.102"
-bincode = { version = "=2.0.1", features = ["serde"] }
-chrono = { version = "=0.4.44", features = ["serde"] }
+chrono = "=0.4.44"
 clap = { version = "=4.6.1", features = ["derive"] }
 directories = "=6.0.0"
-dirs = "=6.0.0"
 image = "=0.25.10"
 ocrs = "=0.9.0"
 rten = "=0.13.1"
-nucleo = "=0.5.0"
-rusqlite = { version = "=0.32.1", features = [
-    "bundled",
-    "functions",
-    "load_extension",
-] }
-serde = { version = "=1.0.228", features = ["derive"] }
+rusqlite = { version = "=0.32.1", features = ["bundled"] }
 tracing-subscriber = { version = "=0.3.23", features = ["env-filter"] }
 tracing = "=0.1.44"
+ignore = "=0.4.27"
+rayon = "=1.12.0"
+nucleo-matcher = "=0.3.1"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "=0.6.4"
+objc2-foundation = "=0.3.2"
+objc2-vision = "=0.3.2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "=0.62.2", features = ["Media_Ocr", "Graphics_Imaging", "Storage_Streams", "Foundation", "Foundation_Collections", "Globalization"] }
+
+[dev-dependencies]
+tempfile = "=3.23.0"
